@@ -36,7 +36,7 @@ class Header extends Component {
           <Link to="/profile" data-testid="link-to-profile">Perfil</Link>
         </nav>
         {isLoading ? (<Loading />) : (
-          <p data-testid="header-user-name">{ inputName }</p>
+          <p data-testid="header-user-name">{`Usuário: ${inputName}`}</p>
         )}
       </header>
     );
