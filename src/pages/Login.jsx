@@ -40,7 +40,6 @@ class Login extends Component {
       const { history } = this.props;
       await createUser({ name: inputName });
       history.push('/search');
-      this.setState({ isLoading: false });
     };
 
     render() {

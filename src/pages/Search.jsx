@@ -1,13 +1,19 @@
 import React, { Component } from 'react';
+import './Search.css';
+import { Link } from 'react-router-dom';
 import Header from '../Components/Header';
+import Loading from '../Components/Loading';
+import searchAlbumsAPI from '../services/searchAlbumsAPI';
 
 class Search extends Component {
   constructor() {
     super();
 
     this.state = {
-      artistName: '',
+      inputName: '',
       isDisabled: true,
+      albums: [],
+      artist: '',
     };
   }
 
@@ -27,19 +33,66 @@ class Search extends Component {
     });
   };
 
+  clickSearchArtist = (event) => {
+    event.preventDefault();
+    this.buttonGetApiAlbums();
+  }
+
+  // 04/02/2022 mentoria com Daniel Farias - sala do requisito 6
+  // usar prevent default na hora de validar a api no botao de clicar
+  // listar as musicas com um map após o form
+  buttonGetApiAlbums = async () => {
+    const { inputName } = this.state;
+    const artist = inputName;
+    const getAlbums = await searchAlbumsAPI(inputName);
+    // console.log(getAlbums);
+    this.setState({
+      inputName: '',
+      isDisabled: false,
+      isLoading: false,
+      albums: getAlbums,
+      artist,
+    });
+  }
+
+  // me inspirei no PR do Mário Fernando e achei mais interessante colocar o link em uma função para deixar o código mais organizado
+  returnAlbumAndArtist = () => {
+    const { artist, albums } = this.state;
+
+    return (
+      <div>
+        {!albums.length ? <h3>Nenhum álbum foi encontrado</h3> : null}
+        <h3>{`Resultado de álbuns de: ${artist}`}</h3>
+        {albums.map(({ artistName, artworkUrl100, collectionId, collectionName }) => (
+          <Link
+            to={ `/album/${collectionId}` }
+            data-testid={ `link-to-album-${collectionId}` }
+            key={ collectionId }
+          >
+            <div className="album-collection">
+              <p>{ collectionName }</p>
+              <img src={ artworkUrl100 } alt={ `Capa do album ${collectionName}` } />
+              <p>{ artistName }</p>
+            </div>
+          </Link>
+        ))}
+      </div>
+    );
+  }
+
   render() {
-    const { artistName, isDisabled } = this.state;
+    const { isLoading, inputName, isDisabled } = this.state;
     return (
       <div data-testid="page-search">
         <Header />
-        <form>
+        <form action="">
           <label htmlFor="search-artist-input">
             <input
               type="text"
               data-testid="search-artist-input"
-              name="artistName"
+              name="inputName"
               placeholder="Digite o nome do artista"
-              value={ artistName }
+              value={ inputName }
               onChange={ this.handleChange }
             />
           </label>
@@ -49,10 +102,14 @@ class Search extends Component {
             type="submit"
             data-testid="search-artist-button"
             disabled={ isDisabled }
+            onClick={ this.clickSearchArtist }
           >
             Pesquisar
           </button>
         </form>
+        {!isLoading
+          ? (this.returnAlbumAndArtist())
+          : (<Loading />)}
       </div>
     );
   }
