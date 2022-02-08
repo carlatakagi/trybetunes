@@ -32,10 +32,13 @@ class MusicCard extends Component {
         checked: true,
       });
     }
-    await removeSong(music);
-    this.setState({
-      checked: false,
-    });
+    if (!checked) {
+      await removeSong(music);
+      this.setState({
+        isLoading: false,
+        checked: false,
+      });
+    }
   };
 
   render() {
