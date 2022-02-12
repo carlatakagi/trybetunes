@@ -1,38 +1,49 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { addSong, removeSong } from '../services/favoriteSongsAPI';
+import { addSong, removeSong, getFavoriteSongs } from '../services/favoriteSongsAPI';
 import Loading from './Loading';
 
 // 07/02/2022 para resolver o requisito 8 tive ajuda do meu amigo Mário Fernando
+// 11/02/2022 jenni: depender do state nao é inteligente, state nao é síncrono
+// 11/02/2022 boa prática deixar setado todos os estados que for utilizar desde o inicio
+// quando dá reload na página, o state é resetado
 class MusicCard extends Component {
   constructor(props) {
     super(props);
 
-    const { trackId } = this.props;
-
     this.state = {
       isLoading: false,
-      trackId,
+      checked: false,
     };
+  }
+
+  componentDidMount() {
+    this.getFavoritesMusics();
+  }
+
+  // funcao que pega as musicas favoritas, quando tiver a resposta pega o data e checa se tem musica favorita
+  getFavoritesMusics() {
+    getFavoriteSongs()
+      .then((data) => {
+        this.checkFavoriteSong(data);
+      });
   }
 
   handleChange = async ({ target }) => {
     const { checked } = target;
     const { music } = this.props;
-    console.log(`valor do checked: ${checked}`);
+
     this.setState({
       isLoading: true,
     });
 
     if (checked) {
-      // music.find((music) => music.trackId === name);
       await addSong(music);
       this.setState({
         isLoading: false,
         checked: true,
       });
-    }
-    if (!checked) {
+    } else {
       await removeSong(music);
       this.setState({
         isLoading: false,
@@ -41,10 +52,20 @@ class MusicCard extends Component {
     }
   };
 
+  checkFavoriteSong(data) {
+    const { music } = this.props;
+
+    const isFavoriteSong = data.some((song) => song.trackId === music.trackId);
+
+    this.setState({
+      checked: isFavoriteSong,
+    });
+  }
+
   render() {
     const { music } = this.props;
-    const { previewUrl, trackName } = music;
-    const { trackId, isLoading, checked } = this.state;
+    console.log('console.log de music', music.trackName);
+    const { checked, isLoading } = this.state;
 
     return (
       <div className="music-card-container">
@@ -54,8 +75,8 @@ class MusicCard extends Component {
         ) : (
 
           <div className="audio-card-container">
-            <h3>{trackName}</h3>
-            <audio data-testid="audio-component" src={ previewUrl } controls>
+            <h3>{ music.trackName }</h3>
+            <audio data-testid="audio-component" src={ music.previewUrl } controls>
               <track kind="captions" />
               O seu navegador não suporta o elemento
               {' '}
@@ -64,13 +85,13 @@ class MusicCard extends Component {
             </audio>
 
             <label htmlFor="music">
-              Favorita
+              Favoritas
               <input
                 id="music"
                 type="checkbox"
-                name={ trackId }
+                name={ music.trackId }
                 checked={ checked }
-                data-testid={ `checkbox-music-${trackId}` }
+                data-testid={ `checkbox-music-${music.trackId}` }
                 onChange={ this.handleChange }
               />
             </label>
@@ -88,7 +109,5 @@ MusicCard.propTypes = {
     previewUrl: PropTypes.string.isRequired,
     trackId: PropTypes.number.isRequired,
     trackName: PropTypes.string.isRequired,
-    /* find: PropTypes.func.isRequired, */
   }).isRequired,
-  trackId: PropTypes.number.isRequired,
 };

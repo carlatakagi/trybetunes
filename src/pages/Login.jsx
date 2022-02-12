@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import './Login.css';
 import Loading from '../Components/Loading';
 import { createUser } from '../services/userAPI';
 
@@ -46,12 +47,12 @@ class Login extends Component {
       const { inputName, isButtonDisabled, isLoading } = this.state;
 
       return (
-        <div data-testid="page-login">
-          <h2>Login</h2>
+        <div className="form-login" data-testid="page-login">
+          <h2>LOGIN</h2>
           {isLoading ? (<Loading />) : (
             <form>
               <label htmlFor="login-name-input">
-                <p>Login:</p>
+                <p>Usuário:</p>
                 <input
                   type="text"
                   data-testid="login-name-input"
@@ -62,6 +63,7 @@ class Login extends Component {
               </label>
 
               <button
+                className="button-login"
                 id="login-submit-button"
                 type="submit"
                 data-testid="login-submit-button"

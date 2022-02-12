@@ -35,15 +35,12 @@ class Album extends Component {
 
   render() {
     const { musicList, albumArtist } = this.state;
-    /* console.log(musicList);
-    console.log(albumArtist.artistName); */
 
     return (
       <div data-testid="page-album">
         <Header />
-        aqui é a tela do album
 
-        <div>
+        <div className="album-page">
           <h3 data-testid="artist-name">
             {albumArtist.artistName}
           </h3>
@@ -59,10 +56,8 @@ class Album extends Component {
         <div>
           {musicList.slice(1).map((music) => (
             <MusicCard
-              artistName={ music.artistName }
               music={ music }
               key={ music.trackName }
-              trackId={ music.trackId }
             />
           ))}
         </div>
@@ -78,5 +73,4 @@ Album.propTypes = {
     params: PropTypes.shape({
       id: PropTypes.string.isRequired }),
   }).isRequired,
-  // artistName: PropTypes.string.isRequired,
 };

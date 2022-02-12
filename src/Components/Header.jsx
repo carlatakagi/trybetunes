@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { getUser } from '../services/userAPI';
+import './Header.css';
 import Loading from './Loading';
 
 class Header extends Component {
@@ -30,13 +31,15 @@ class Header extends Component {
 
     return (
       <header data-testid="header-component">
-        <nav>
+        <nav className="header-container">
           <Link to="/search" data-testid="link-to-search">Pesquisar</Link>
           <Link to="/favorites" data-testid="link-to-favorites">Favoritas</Link>
           <Link to="/profile" data-testid="link-to-profile">Perfil</Link>
         </nav>
         {isLoading ? (<Loading />) : (
-          <p data-testid="header-user-name">{`Usuário: ${inputName}`}</p>
+          <div className="user">
+            <p data-testid="header-user-name">{`Usuário: ${inputName}`}</p>
+          </div>
         )}
       </header>
     );

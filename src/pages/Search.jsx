@@ -56,12 +56,13 @@ class Search extends Component {
   }
 
   // me inspirei no PR do Mário Fernando e achei mais interessante colocar o link em uma função para deixar o código mais organizado
+  // link do PR  do Mário Fernando: https://github.com/tryber/sd-018-b-project-trybetunes/pull/30
   returnAlbumAndArtist = () => {
     const { artist, albums } = this.state;
 
     return (
       <div>
-        {!albums.length ? <h3>Nenhum álbum foi encontrado</h3> : null}
+        {!albums.length ? <p>Nenhum álbum foi encontrado</p> : null}
         <h3>{`Resultado de álbuns de: ${artist}`}</h3>
         {albums.map(({ artistName, artworkUrl100, collectionId, collectionName }) => (
           <Link

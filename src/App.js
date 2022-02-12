@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import './App.css';
 import Login from './pages/Login';
 import Search from './pages/Search';
 import Album from './pages/Album';
@@ -8,12 +9,15 @@ import Profile from './pages/Profile';
 import ProfileEdit from './pages/ProfileEdit';
 import NotFound from './pages/NotFound';
 
+// requisito 9 e 10 - pedi ajuda para a minha irmã
+// padronizar sem arrow function
+// atualização de estado do react é assincrona
 class App extends React.Component {
   render() {
     return (
 
       <BrowserRouter>
-        <p>TrybeTunes</p>
+        <h1>TrybeTunes</h1>
 
         <Switch>
           <Route exact path="/" component={ Login } />
