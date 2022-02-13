@@ -4,7 +4,7 @@ import { addSong, removeSong, getFavoriteSongs } from '../services/favoriteSongs
 import Loading from './Loading';
 
 // 07/02/2022 para resolver o requisito 8 tive ajuda do meu amigo Mário Fernando
-// 11/02/2022 jenni: depender do state nao é inteligente, state nao é síncrono
+// 11/02/2022 requisitos 9 e 10 - pedi ajuda para minha irmã - dica: depender do state nao é inteligente, pois o state nao é síncrono
 // 11/02/2022 boa prática deixar setado todos os estados que for utilizar desde o inicio
 // quando dá reload na página, o state é resetado
 class MusicCard extends Component {
@@ -63,8 +63,7 @@ class MusicCard extends Component {
   }
 
   render() {
-    const { music } = this.props;
-    console.log('console.log de music', music.trackName);
+    const { music = {} } = this.props; // default value de destructuring
     const { checked, isLoading } = this.state;
 
     return (
@@ -106,7 +105,7 @@ export default MusicCard;
 
 MusicCard.propTypes = {
   music: PropTypes.shape({
-    previewUrl: PropTypes.string.isRequired,
+    previewUrl: PropTypes.string,
     trackId: PropTypes.number.isRequired,
     trackName: PropTypes.string.isRequired,
   }).isRequired,
