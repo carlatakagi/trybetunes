@@ -4,7 +4,6 @@ import Loading from '../Components/Loading';
 import MusicCard from '../Components/MusicCard';
 import { getFavoriteSongs } from '../services/favoriteSongsAPI';
 
-// requisito 10 - pedi ajuda para minha irmã
 class Favorites extends Component {
   constructor(props) {
     super(props);
