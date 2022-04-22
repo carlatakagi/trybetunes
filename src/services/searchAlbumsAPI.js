@@ -1,3 +1,5 @@
+// arquivo criado pela Trybe
+
 const searchAlbumsAPI = async (artist) => {
   const artistNameURL = encodeURI(artist).replaceAll('%20', '+');
 
